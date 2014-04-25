@@ -4,13 +4,11 @@ import grails.transaction.Transactional
 import haka.commands.MemcachedCommand
 import net.spy.memcached.AddrUtil
 import net.spy.memcached.MemcachedClient
+import org.grails.plugins.metrics.groovy.Metered
+import org.grails.plugins.metrics.groovy.Timed
 
 import javax.annotation.PostConstruct
 
-/**
- * Ol' Goodwill:
- * https://www.ibm.com/developerworks/library/j-memcached2/
- */
 @Transactional
 class MemcachedService {
 
@@ -37,6 +35,7 @@ class MemcachedService {
         }
     }
 
+    @Timed @Metered
     def get(String key, Closure closure) {
 
         MemcachedCommand memcachedCommand = new MemcachedCommand({

@@ -1,4 +1,7 @@
 import haka.Project
+import org.grails.plugins.metrics.groovy.Metrics
+
+import java.util.concurrent.TimeUnit
 
 class BootStrap {
 
@@ -14,6 +17,8 @@ class BootStrap {
 
         Project billingConversion = new Project(name: "Billing Conversion", description: "Decomission old billing systems")
         billingConversion.save()
+
+        Metrics.startJmxReporter()
     }
     def destroy = {
 
