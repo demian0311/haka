@@ -1,6 +1,7 @@
 package haka
 
 import grails.transaction.Transactional
+import haka.commands.ProjectCommand
 
 @Transactional
 class ProjectService {
@@ -9,18 +10,18 @@ class ProjectService {
     def grailsApplication
 
     def findAll() {
-        if(grailsApplication.config.haka.mischief){
-            println("sleeping")
-            Integer howLongToSleep = random.nextInt(400) + 100
-            println("sleeping for $howLongToSleep")
-            Thread.sleep(howLongToSleep)
-        }
+        ProjectCommand projectCommand = new ProjectCommand({
+            if(grailsApplication.config.haka.mischief){
+                Thread.sleep(random.nextInt(400) + 100)
+            }
 
-        Project.findAll()
+            Project.findAll()
+        })
+
+        projectCommand.execute()
     }
 
     def findById(id){
-        println(">>" + grailsApplication.config.haka.mischief)
         if(grailsApplication.config.haka.mischief && random.nextInt() % 9 == 0){
             println("throwing an exception")
             throw new RuntimeException("data-center is smoking hole")
@@ -28,5 +29,5 @@ class ProjectService {
 
         Project.get(id)
     }
-
 }
+
