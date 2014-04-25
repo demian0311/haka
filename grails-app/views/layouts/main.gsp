@@ -23,6 +23,9 @@
 
             <div class="footer">
                 <div class="printonly">http://neidetcher.com/index.html</div>
+                <g:if test="${start}">
+                    ${System.currentTimeMillis() - start}ms
+                </g:if>
             </div>
             <r:layoutResources />
         </div>

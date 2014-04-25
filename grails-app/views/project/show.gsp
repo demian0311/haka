@@ -8,5 +8,8 @@
 <body>
     <h2>Description</h2>
     ${project.description}
+<br/>
+<br/>
+<br/>
 </body>
 </html>

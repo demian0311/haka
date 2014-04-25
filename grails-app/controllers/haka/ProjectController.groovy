@@ -5,10 +5,10 @@ class ProjectController {
     def projectService
 
     def index(){
-        [projects: projectService.findAll()]
+        [projects: projectService.findAll(), start: System.currentTimeMillis()]
     }
 
     def show(){
-        [project: projectService.findById(params.id)]
+        [project: projectService.findById(params.id), start: System.currentTimeMillis()]
     }
 }
