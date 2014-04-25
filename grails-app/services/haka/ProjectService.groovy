@@ -22,12 +22,16 @@ class ProjectService {
     }
 
     def findById(id){
-        if(grailsApplication.config.haka.mischief && random.nextInt() % 9 == 0){
-            println("throwing an exception")
-            throw new RuntimeException("data-center is smoking hole")
-        }
+        ProjectCommand projectCommand = new ProjectCommand({
+            if(grailsApplication.config.haka.mischief && random.nextInt() % 13 == 0){
+                println("throwing an exception")
+                throw new RuntimeException("data-center is smoking hole")
+            }
 
-        Project.get(id)
+            Project.get(id)
+        })
+
+        projectCommand.execute()
     }
 }
 

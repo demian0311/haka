@@ -25,8 +25,6 @@ http://mvnrepository.com/artifact/com.netflix.hystrix/hystrix-dashboard/1.2.16
 
 ## Process
 ### TODO
-- wrap ProjectService calls in circuit breaker
-- observe circuit breaker working
 - wrap database calls in memcache caching
 - observe cache working
 - wrap calls in metrics collection
@@ -39,4 +37,6 @@ http://mvnrepository.com/artifact/com.netflix.hystrix/hystrix-dashboard/1.2.16
    - response codes?
 
 ### DONE
+- observe circuit breaker working
+- wrap ProjectService calls in circuit breaker
 - pull in Hystrix Plugin
