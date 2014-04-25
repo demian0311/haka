@@ -23,11 +23,16 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "update"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            driverClassName = "com.mysql.jdbc.Driver"
+            pooled = true
+            dbCreate = "create-drop" //"update"           // "create"
+            username = "haka"
+            password = "akah"
+            url = "jdbc:mysql://localhost/haka"
         }
     }
     production {
+        /*
         dataSource {
             dbCreate = "update"
             url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
@@ -52,5 +57,6 @@ environments {
                defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
             }
         }
+        */
     }
 }
