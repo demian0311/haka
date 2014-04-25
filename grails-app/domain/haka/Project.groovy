@@ -1,6 +1,7 @@
 package haka
 
-class Project {
+class Project implements Serializable{
+    static final long serialVersionUID = 42L;
 
     String name
     String description

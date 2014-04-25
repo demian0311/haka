@@ -96,6 +96,7 @@ environments {
     }
     test {
         haka.mischief = true
+        haka.memcachedUrl = "localhost:11211"
         grails.logging.jul.usebridge = true
     }
     production {

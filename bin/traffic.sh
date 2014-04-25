@@ -10,5 +10,5 @@ do
       sleep .5
       curl --silent \
          --write-out "$ii/$MAX %{http_code} %{time_total} %{filename_effective}"\
-         --remote-name http://localhost:8080/haka/project/show/1; echo
+         --remote-name http://localhost:8080/haka/project; echo
 done

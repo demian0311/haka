@@ -8,6 +8,7 @@ class ProjectService {
 
     Random random = new Random()
     def grailsApplication
+    def memcachedService
 
     def findAll() {
         ProjectCommand projectCommand = new ProjectCommand({
@@ -15,7 +16,15 @@ class ProjectService {
                 Thread.sleep(random.nextInt(400) + 100)
             }
 
-            Project.findAll()
+            def closure = {Project.findAll()}
+
+            try{
+                return memcachedService.get("Project.findAll", closure)
+            } catch (Throwable e){
+                println("***********" + e)
+            }
+
+            return closure()
         })
 
         projectCommand.execute()
@@ -28,7 +37,15 @@ class ProjectService {
                 throw new RuntimeException("data-center is smoking hole")
             }
 
-            Project.get(id)
+            def closure = {Project.get(id)}
+
+            try{
+                return memcachedService.get("Project.findById($id)", closure)
+            } catch (Throwable e){
+                println("***********" + e)
+            }
+
+            return closure()
         })
 
         projectCommand.execute()
