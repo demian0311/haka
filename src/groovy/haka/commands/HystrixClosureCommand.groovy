@@ -19,7 +19,7 @@ class HystrixClosureCommand extends HystrixCommand {
     }
 
     HystrixClosureCommand(String key, Closure closureIn){
-        super(createHystrixCommandSetter("foo"))
+        super(createHystrixCommandSetter(key))
         closure = closureIn
     }
 

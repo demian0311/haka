@@ -1,5 +1,6 @@
 package haka
 
+import com.codahale.metrics.health.HealthCheck
 import grails.transaction.Transactional
 import haka.commands.MemcachedCommand
 import net.spy.memcached.AddrUtil
@@ -10,11 +11,23 @@ import org.grails.plugins.metrics.groovy.Timed
 import javax.annotation.PostConstruct
 
 @Transactional
-class MemcachedService {
+class MemcachedService extends HealthCheck{
 
     def grailsApplication
     def MemcachedClient memcachedClient
     Integer expirationInSeconds = 120
+
+    HealthCheck.Result check() throws Exception{
+        Map<SocketAddress, Map<String, String>> stats = memcachedClient.stats
+        SocketAddress firstKey = stats.keySet().first()
+        Map<String, String> map = stats.get(firstKey)
+
+        if(map.isEmpty()){
+            HealthCheck.Result.unhealthy("unable to get stats from ${firstKey}")
+        } else {
+            HealthCheck.Result.healthy()
+        }
+    }
 
     @PostConstruct
     def void init() {

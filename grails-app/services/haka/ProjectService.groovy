@@ -1,19 +1,28 @@
 package haka
 
+import com.codahale.metrics.health.HealthCheck
 import grails.transaction.Transactional
 import haka.commands.ProjectCommand
 import org.grails.plugins.metrics.groovy.Metered
 import org.grails.plugins.metrics.groovy.Timed
 
 @Transactional
-class ProjectService {
+class ProjectService extends HealthCheck {
 
     Random random = new Random()
     def grailsApplication
     def memcachedService
 
+    HealthCheck.Result check() throws Exception{
+        if(this.findAll().isEmpty()){
+            HealthCheck.Result.unhealthy()
+        } else {
+            HealthCheck.Result.healthy()
+        }
+    }
+
     @Timed @Metered
-    def findAll() {
+    def List<Project> findAll() {
         ProjectCommand projectCommand = new ProjectCommand({
             if(grailsApplication.config.haka.mischief){
                 Thread.sleep(random.nextInt(400) + 100)
