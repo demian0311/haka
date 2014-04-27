@@ -47,12 +47,10 @@ http://mvnrepository.com/artifact/com.netflix.hystrix/hystrix-dashboard/1.2.16
 
 ## Process
 ### TODO
-- metrics
-   - health checks
-   - reporting elsewhere?
 
 ### DONE
 - metrics
+   - health checks
    - jmx reporting
    - timers
    - meters

@@ -6,9 +6,11 @@ class BootStrap {
 
     def projectService
     def memcachedService
+    def grailsApplication
 
     def init = { servletContext ->
         // TOOD-DLN: do env check
+
         Project services = new Project(name: "Services", description: "ReST JSON services")
         services.save()
 

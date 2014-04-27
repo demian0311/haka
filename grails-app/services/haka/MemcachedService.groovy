@@ -32,7 +32,7 @@ class MemcachedService extends HealthCheck{
     @PostConstruct
     def void init() {
         String memcachedUrl = grailsApplication.config.haka.memcachedUrl
-        println("memcachedUrl: " + memcachedUrl)
+        log.debug("memcachedUrl: " + memcachedUrl)
 
         if (memcachedUrl) {
             println("Caching enabled, using memcached at " + memcachedUrl)
@@ -50,23 +50,27 @@ class MemcachedService extends HealthCheck{
 
     @Timed @Metered
     def get(String key, Closure closure) {
+        if(check().equals(HealthCheck.Result.healthy())) {
+            MemcachedCommand memcachedCommand = new MemcachedCommand({
+                if (memcachedClient) {
+                    def fromCache = memcachedClient.get(key)
+                    if (fromCache) {
+                        return fromCache
+                    } else {
+                        def fromClosure = closure()
+                        if (fromClosure) {
+                            set(key, fromClosure)
+                        }
 
-        MemcachedCommand memcachedCommand = new MemcachedCommand({
-            if (memcachedClient) {
-                def fromCache = memcachedClient.get(key)
-                if (fromCache) {
-                    return fromCache
-                } else {
-                    def fromClosure = closure()
-                    if (fromClosure) {
-                        set(key, fromClosure)
+                        return fromClosure
                     }
-
-                    return fromClosure
                 }
-            }
-        })
+            })
 
-        memcachedCommand.execute()
+            memcachedCommand.execute()
+        } else {
+            log.error("memcached not healthy, not caching, key: $key")
+            closure()
+        }
     }
 }
