@@ -23,22 +23,18 @@ class ProjectService extends HealthCheck {
 
     @Timed @Metered
     def List<Project> findAll() {
-        ProjectCommand projectCommand = new ProjectCommand({
+        (new ProjectCommand({
             mischiefSleep()
-            return memcachedService.get("Project.findAll", {Project.findAll()})
-        })
-
-        projectCommand.execute()
+            return memcachedService.get("Project.findAll()", {Project.findAll()})
+        })).execute()
     }
 
     @Timed @Metered
     def findById(id){
-        ProjectCommand projectCommand = new ProjectCommand({
+        (new ProjectCommand({
             mischiefThrow()
             return memcachedService.get("Project.findById($id)", {Project.get(id)})
-        })
-
-        projectCommand.execute()
+        })).execute()
     }
 
     private def mischiefSleep(){
