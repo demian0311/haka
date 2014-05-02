@@ -18,12 +18,8 @@ class MemcachedService extends HealthCheck {
     Integer expirationInSeconds = 120
 
     HealthCheck.Result check() throws Exception {
-        Map<SocketAddress, String> versions = memcachedClient.versions
-        for(key in versions.keySet()){
-            String version = versions[key]
-            if(version == null){
-                return HealthCheck.Result.unhealthy("unable to get stats from ${key}")
-            }
+        if(memcachedClient.versions.isEmpty()){
+            return HealthCheck.Result.unhealthy("no servers available")
         }
 
         return HealthCheck.Result.healthy()

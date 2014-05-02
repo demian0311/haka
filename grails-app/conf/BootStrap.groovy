@@ -1,3 +1,4 @@
+import com.codahale.metrics.Slf4jReporter
 import haka.Project
 import org.grails.plugins.metrics.groovy.HealthChecks
 import org.grails.plugins.metrics.groovy.Metrics
