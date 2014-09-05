@@ -1,8 +1,8 @@
 package haka
 
 import com.codahale.metrics.health.HealthCheck
+import grails.async.Promise
 import grails.transaction.Transactional
-import haka.commands.MemcachedCommand
 import net.spy.memcached.AddrUtil
 import net.spy.memcached.MemcachedClient
 import org.grails.plugins.metrics.groovy.Metered
@@ -50,7 +50,7 @@ class MemcachedService extends HealthCheck {
     @Metered
     def get(String key, Closure closure) {
         if (check().equals(HealthCheck.Result.healthy())) {
-            MemcachedCommand memcachedCommand = new MemcachedCommand({
+            Promise memcachedCommand = hystrix(group:'Memcached'){
                 def fromCache = memcachedClient.get(key)
                 if (fromCache) {
                     return fromCache
@@ -62,9 +62,9 @@ class MemcachedService extends HealthCheck {
 
                     return fromClosure
                 }
-            })
+            }
 
-            memcachedCommand.execute()
+            memcachedCommand.get()
         } else {
             log.error("memcached not healthy, not caching, key: $key")
             closure()

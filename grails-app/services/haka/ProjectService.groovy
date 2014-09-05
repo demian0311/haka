@@ -2,7 +2,6 @@ package haka
 
 import com.codahale.metrics.health.HealthCheck
 import grails.transaction.Transactional
-import haka.commands.ProjectCommand
 import org.grails.plugins.metrics.groovy.Metered
 import org.grails.plugins.metrics.groovy.Timed
 
@@ -23,18 +22,18 @@ class ProjectService extends HealthCheck {
 
     @Timed @Metered
     def List<Project> findAll() {
-        (new ProjectCommand({
+        (hystrix(group:'ProjectDatabase'){
             mischiefSleep()
             return memcachedService.get("Project.findAll()", {Project.findAll()})
-        })).execute()
+        }).get()
     }
 
     @Timed @Metered
     def findById(id){
-        (new ProjectCommand({
+        (hystrix(group:'ProjectDatabase'){
             mischiefThrow()
             return memcachedService.get("Project.findById($id)", {Project.get(id)})
-        })).execute()
+        }).get()
     }
 
     private def mischiefSleep(){
